@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(helmet());
 app.use(cors());
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '10mb' }));
 // Serve static files from the React app build
 app.use(express.static(path.join(__dirname, '../dist')));
