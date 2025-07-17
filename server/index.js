@@ -17,7 +17,8 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-
+// Serve static files from the React app build
+app.use(express.static(path.join(__dirname, '../dist')));
 // Rate limiting
 const uploadLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -452,8 +453,9 @@ app.use((error, req, res, next) => {
 });
 
 // 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 app.listen(PORT, () => {
